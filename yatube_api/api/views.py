@@ -1,19 +1,8 @@
 from django.shortcuts import get_object_or_404
 from posts.models import Post, Group, Comment
 from .serializers import GroupSerializer, PostSerializer, CommentSerializer
-from rest_framework import viewsets, permissions
-
-
-class IsOwner(permissions.BasePermission):
-
-    def has_permission(self, request, view):
-        return request.user.is_authenticated
-
-    def has_object_permission(self, request, view, obj):
-        if (request.method in permissions.SAFE_METHODS
-                or request.method == 'POST'):
-            return True
-        return obj.author == request.user
+from rest_framework import viewsets
+from .permissions import IsOwner
 
 
 class PostViewSet(viewsets.ModelViewSet):
